@@ -1,5 +1,6 @@
 package com.example.algorithms
 
+import android.annotation.SuppressLint
 import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -18,12 +19,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var btnQuickSort: Button
     private lateinit var btnMergeSort: Button
     private lateinit var tvSortedArray: TextView
-    private val list = bubbleSort(intArrayOf(2,3,45,85,33,12,69,5,1,11,43,55))
+//    private val bubbleSortList = intArrayOf(8, 2, 5, 30, 26, 55)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        window.statusBarColor = ContextCompat.getColor(this,R.color.dark_blue)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.dark_blue)
 
         setListeners()
     }
@@ -32,58 +33,77 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     var desc = " "
     var bubbleSortedText = " "
     var quickSortedText = " "
+    var MergeSortedText = " "
+
+    @SuppressLint("SetTextI18n")
     override fun onClick(p0: View?) {
         if (p0 != null) {
             when (p0.id) {
-                R.id.bubble_sort ->{
-//                    seeDesc.visibility= VISIBLE
+                R.id.bubble_sort -> {
+                    tvSortedArray.text = ""
+                    desc = " "
+                    seeDesc.text = ""
                     seeDesc.text = "Click to see description  "
-                    desc += "Steps: \n\n "
-                    desc += " $list "
+                    desc += "STEPS: \n "
+                    desc += "-----------\n "
+                    bubbleSortedText = " "
 
+                    val list = bubbleSort(intArrayOf(8, 2, 5, 30, 26, 55, 46, 16))
                     bubbleSortedText += "["
-                    for (k in list){
-                        print("$k ")
-                        desc += "\n $k  \n"
+                    desc += "\n["
+                    for (k in list) {
+                        desc += "$k,"
                         bubbleSortedText += "$k, "
                         Log.d("test", "bubbleSort $k")
                     }
+
+                    desc += "]\n"
                     bubbleSortedText += "]"
-
                     tvSortedArray.text = bubbleSortedText
-                    desc += " SORTED"
+                    desc += "\n===SORTED==="
                 }
-                R.id.quick_sort ->{
-//                    seeDesc.visibility= VISIBLE
+                R.id.quick_sort -> {
+                    tvSortedArray.text = ""
+                    seeDesc.text = ""
+                    desc = " "
                     seeDesc.text = "Click to see description  "
-
                     desc += "STEPS: \n "
-                    val numbers = listOf<Int>(2, 6, 9,  1, 0,22,65,5)
+                    desc += "-----------\n "
+                    quickSortedText = " "
+
+//                   val numbers = listOf(10, 2, 1, 16, 6, 8, 73, 99, 3, 16, 5, 9)
+                   val numbers = listOf(8, 2, 5, 30, 26, 55, 46, 16)
                     desc += "$numbers \n "
                     println(numbers)
-                    val ordered =  quickSort(numbers)
-                    println(ordered)
-                    desc += "$ordered \n"
-                    desc += " SORTED"
-                    Log.d("test", "quickSort $ordered")
-                    quickSortedText += "$ordered \n "
+                    val ordered = quickSort(numbers)
 
+
+                    desc += "\n\n$ordered \n"
+                    desc += "\n===SORTED==="
+                    Log.d("test", "quickSort $ordered")
+                    quickSortedText = "$ordered \n "
                     tvSortedArray.text = quickSortedText
                 }
-                R.id.merge_sort ->{
-//                    seeDesc.visibility= VISIBLE
+                R.id.merge_sort -> {
+                    tvSortedArray.text = ""
+                    seeDesc.text = ""
+                    desc = " "
                     seeDesc.text = "Click to see description  "
-                    desc += "Steps: \n "
-                    val numbersm = mutableListOf(38,27,43,3,9,82,10)
+                    desc += "STEPS: \n "
+                    desc += "-----------\n "
+                    MergeSortedText = " "
+
+                    val numbersm = mutableListOf(8, 2, 5, 30, 26, 55, 46, 16)
+                    //val numbersm = mutableListOf(63, 50, 13, 85, 3, 2, 4, 9, 18, 7, 27)
                     desc += "$numbersm \n"
-                    val sortedList = mergeSort(numbersm)
-                    desc += "$sortedList \n"
-                    desc += " SORTED"
-                    println("Unsorted: $numbersm")
-                    println("Sorted: $sortedList")
-                    Log.d("test", "mergeSort $sortedList")
+                    val sortedList_ = mergeSort(numbersm)
+                    desc += "\n===SORTED==="
+                    MergeSortedText = "$sortedList_ \n "
+                    tvSortedArray.text = MergeSortedText
+
                 }
-                R.id.see_description ->{
+
+                R.id.see_description -> {
                     seeDesc.text = " $desc"
                 }
 
@@ -93,9 +113,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun setListeners() {
-         btnBubbleSort = findViewById<Button>(R.id.bubble_sort)
-         btnQuickSort = findViewById<Button>(R.id.quick_sort)
-         btnMergeSort = findViewById<Button>(R.id.merge_sort)
+        btnBubbleSort = findViewById<Button>(R.id.bubble_sort)
+        btnQuickSort = findViewById<Button>(R.id.quick_sort)
+        btnMergeSort = findViewById<Button>(R.id.merge_sort)
         seeDesc = findViewById(R.id.see_description)
         tvSortedArray = findViewById(R.id.sorted_array)
 
@@ -106,45 +126,52 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
-    fun bubbleSort(arr:IntArray):IntArray{
+    fun bubbleSort(arr: IntArray): IntArray {
         var swap = true
-        while(swap){
+        while (swap) {
             swap = false
-            for(i in 0 until arr.size-1){
-                if(arr[i] > arr[i+1]){
+            for (i in 0 until arr.size - 1) {
+                if (arr[i] > arr[i + 1]) {
+                    desc += "\n if ${arr[i]} > ${arr[i + 1]}"
                     val temp = arr[i]
-                    arr[i] = arr[i+1]
+                    arr[i] = arr[i + 1]
                     arr[i + 1] = temp
-
+                    desc += "\n Now, swap"
+                    desc += "\n ${arr[i]},  ${arr[i + 1]} \n"
                     swap = true
+                } else {
+                    desc += "\n if ${arr[i]} > ${arr[i + 1]}"
+                    desc += "\n No need to swap"
+                    desc += "\n ${arr[i]},  ${arr[i + 1]} \n"
                 }
             }
         }
         return arr
     }
 
-    fun quickSort(items:List<Int>):List<Int>{
+    fun quickSort(items: List<Int>): List<Int> {
 
-        if (items.count() < 2){
-           // desc += "\n $items" //alg alg 2 6 9 1 0
+        if (items.count() < 2) {
+            // desc += "\n $items" //alg alg 2 6 9 1 0
             return items
         }
-        val pivot = items[items.count()/2]
-        desc += "I Chose Pivot= $pivot\n"
+        desc += "\n\nNow, Sort from these=> $items\n"
+        val pivot = items[items.count() / 2]
+        desc += "\n Now,I Chose Pivot= $pivot\n"
 
         val equal = items.filter { it == pivot }
         //desc += "equal: $equal\n"
 //    println("pivot value is : "+equal)
 
         val less = items.filter { it < pivot }
-        desc += "< pivot $less"
+        desc += "< pivot digits: $less \n"
 //    println("Lesser values than pivot : "+less)
 
         val greater = items.filter { it > pivot }
-        desc += "  > pivot $greater \n"
+        desc += "  > pivot  digits: $greater \n"
 //    println("Greater values than pivot : "+greater)
-        var quickreturn = "sort  ${quickSort(less) + equal + quickSort(greater)}"
-        desc += quickreturn
+        //  var quickreturn = "sort  ${quickSort(less) + equal + quickSort(greater)}"
+        desc += "Sort elements::  ${quickSort(less) + equal + quickSort(greater)}"
         return quickSort(less) + equal + quickSort(greater)
     }
 
@@ -153,16 +180,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             return list
         }
 
+        //3, 2, 4,       9, 18, 7
         val middle = list.size / 2
-        var left = list.subList(0,middle);
-        var right = list.subList(middle,list.size);
+        desc += "\n Again, Divide elements into two:"//$middle digits"
+        var left = list.subList(0, middle)
+        desc += "\nLEFT: $left"
+        var right = list.subList(middle, list.size);
+        desc += "       RIGHT: $right \n"
 
         return merge(mergeSort(left), mergeSort(right))
     }
-    fun merge(left: List<Int>, right: List<Int>): List<Int>  {
+
+    fun merge(left: List<Int>, right: List<Int>): List<Int> {
         var indexLeft = 0
         var indexRight = 0
-        var newList : MutableList<Int> = mutableListOf()
+        var newList: MutableList<Int> = mutableListOf()
 
         while (indexLeft < left.count() && indexRight < right.count()) {
             if (left[indexLeft] <= right[indexRight]) {
@@ -178,11 +210,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             newList.add(left[indexLeft])
             indexLeft++
         }
-
+//        desc +="\n-->> $newList"
         while (indexRight < right.size) {
             newList.add(right[indexRight])
             indexRight++
         }
-        return newList;
+        desc += "\n $newList\n"
+        return newList
     }
 }
