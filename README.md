@@ -1,3 +1,5 @@
 # Algorithms
 
-DAA PROJECTS
+DAA
+
+Different types of sorting.
